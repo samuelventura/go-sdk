@@ -13,8 +13,8 @@ import (
 )
 
 func main() {
+	//log and flag default to stderr
 	log.SetFlags(log.LstdFlags | log.Lmicroseconds)
-	log.SetOutput(os.Stdout)
 
 	ctrlc := make(chan os.Signal, 1)
 	signal.Notify(ctrlc, os.Interrupt)
@@ -25,7 +25,7 @@ func main() {
 
 	if len(strings.TrimSpace(*proxyep)) == 0 ||
 		len(strings.TrimSpace(*address)) == 0 {
-		fmt.Printf("usage: %s -p 127.0.0.1:9999 -a 192.168.0.254:80\n", os.Args[0])
+		fmt.Fprintf(os.Stderr, "usage: %s -p 127.0.0.1:9999 -a 192.168.0.254:80\n", os.Args[0])
 		flag.PrintDefaults()
 		return
 	}
@@ -40,14 +40,24 @@ func main() {
 		log.Println(err)
 		return
 	}
+	defer func() {
+		err := conn.Close()
+		log.Println("connection closed", err)
+	}()
 
 	done := make(chan interface{})
 	go func() {
-		io.Copy(os.Stdout, conn)
+		_, err := io.Copy(os.Stdout, conn)
+		if err != nil {
+			log.Println(err)
+		}
 		done <- true
 	}()
 	go func() {
-		io.Copy(conn, os.Stdin)
+		_, err := io.Copy(conn, os.Stdin)
+		if err != nil {
+			log.Println(err)
+		}
 		done <- true
 	}()
 	select {
