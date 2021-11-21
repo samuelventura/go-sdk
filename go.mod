@@ -3,8 +3,8 @@ module github.com/samuelventura/tryouts
 go 1.17
 
 require (
-	github.com/gin-gonic/gin v1.7.5
-	golang.org/x/net v0.0.0-20211008194852-3b03d305991f
+	github.com/gin-gonic/gin v1.7.4
+	golang.org/x/net v0.0.0-20211118161319-6a13c67c3ce4
 )
 
 require (
