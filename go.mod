@@ -8,6 +8,11 @@ require (
 )
 
 require (
+	github.com/felixge/tcpkeepalive v0.0.0-20160804073959-5bb0b2dea91e // indirect
+	github.com/samuelventura/go-tools v0.0.0-20211121180241-3813b949066c // indirect
+)
+
+require (
 	github.com/gin-contrib/sse v0.1.0 // indirect
 	github.com/go-playground/locales v0.13.0 // indirect
 	github.com/go-playground/universal-translator v0.17.0 // indirect

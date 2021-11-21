@@ -5,7 +5,6 @@ import (
 	"os"
 )
 
-//(cd tools/hostname && go run .)
 func main() {
 	hostname, err := os.Hostname()
 	if err != nil {

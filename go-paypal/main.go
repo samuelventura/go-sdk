@@ -8,7 +8,6 @@ import (
 	"github.com/plutov/paypal/v4"
 )
 
-//(cd tryout/paypal && go run .)
 //export PAYPAL_CLIENTID=
 //export PAYPAL_SECRETID=
 func main() {

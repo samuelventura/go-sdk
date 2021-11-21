@@ -1,3 +1,4 @@
 (cd go-hostname && go run .)
 (cd go-lsnic && go run .)
 (cd go-paypal && go run .)
+(cd go-tools && go run .)

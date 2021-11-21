@@ -5,7 +5,6 @@ import (
 	"net"
 )
 
-//(cd tools/lsnic && go run .)
 func main() {
 	ifaces, err := net.Interfaces()
 	if err != nil {
