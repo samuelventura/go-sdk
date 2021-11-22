@@ -2,3 +2,21 @@
 (cd go-lsnic && go run .)
 (cd go-paypal && go run .)
 (cd go-tools && go run .)
+
+https://github.com/evanw/esbuild
+https://github.com/pradel/create-react-app-esbuild
+https://how-to.dev/how-to-build-code-generated-by-create-react-app-with-esbuild
+npx create-react-app react-esbuild1
+cd react-esbuild1
+npm start
+#look the same
+
+https://github.com/awran5/esbuild-create-react-app#readme
+npx esbuild-create-react-app react-esbuild2
+cd react-esbuild2
+npm start
+#much faster!
+http://127.0.0.1:8181
+npm install --global yarn
+brew install yarn
+yarn start
