@@ -13,7 +13,8 @@ const CR = '\r'
 const NL = '\n'
 
 //go run . 10.77.3.180:8001
-//*1A1  #continuo
+//*1A0  #continuo
+//*1A1  #stop
 //*1B1  #single
 func main() {
 	addr := os.Args[1]
