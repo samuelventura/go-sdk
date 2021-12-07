@@ -9,6 +9,10 @@ require (
 
 require (
 	github.com/felixge/tcpkeepalive v0.0.0-20160804073959-5bb0b2dea91e // indirect
+	github.com/goburrow/modbus v0.1.0 // indirect
+	github.com/goburrow/serial v0.1.0 // indirect
+	github.com/samuelventura/go-modbus v0.1.0 // indirect
+	github.com/samuelventura/go-serial v0.1.0 // indirect
 	github.com/samuelventura/go-tools v0.0.0-20211121180241-3813b949066c // indirect
 )
 
@@ -26,6 +30,6 @@ require (
 	github.com/plutov/paypal/v4 v4.4.1
 	github.com/ugorji/go/codec v1.1.7 // indirect
 	golang.org/x/crypto v0.0.0-20200622213623-75b288015ac9 // indirect
-	golang.org/x/sys v0.0.0-20210423082822-04245dca01da // indirect
+	golang.org/x/sys v0.0.0-20211205182925-97ca703d548d // indirect
 	gopkg.in/yaml.v2 v2.2.8 // indirect
 )
