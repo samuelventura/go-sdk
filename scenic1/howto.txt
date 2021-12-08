@@ -1,0 +1,11 @@
+mix archive.install hex scenic_new
+cd ..
+mix scenic.new.nerves scenic1
+cd scenic1
+
+export MIX_TARGET=rpi4
+#cp config/rpi3 to rpi4
+mix deps.get #NOT WORKING!!!!!
+mix compile
+mix nerves.release.init
+mix firmware.burn
