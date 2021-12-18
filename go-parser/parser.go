@@ -1,9 +1,11 @@
 package main
 
 import (
+	"fmt"
 	"math"
 	"strconv"
 	"strings"
+	"unicode"
 )
 
 type node struct {
@@ -12,59 +14,163 @@ type node struct {
 	right *node
 }
 
+func trace(args ...interface{}) {
+	fmt.Println(args...)
+}
+
 func parse(expr string) *node {
-	n := &node{}
-	for i, c := range expr {
-		if i == 0 {
+	trace("parse", expr)
+	pc := 0
+	expr = strings.TrimSpace(expr)
+	for i, r := range expr {
+		if r == '(' {
+			pc++
+		}
+		if r == ')' {
+			pc--
+		}
+		if pc > 0 {
 			continue
 		}
-		switch c {
+		if unicode.IsSpace(r) {
+			continue
+		}
+		//ignore first sign
+		if i == 0 {
+			switch r {
+			case '+':
+				continue
+			case '-':
+				continue
+			}
+		}
+		switch r {
 		case '+':
+			n := &node{}
 			n.expr = "+"
-			n.left = parsei(expr[:i])
+			n.left = parse_m(expr[:i])
 			n.right = parse(expr[i:])
 			return n
 		case '-':
+			n := &node{}
 			n.expr = "+"
-			n.left = parsei(expr[:i])
+			n.left = parse_m(expr[:i])
 			n.right = parse(expr[i:])
 			return n
 		}
 	}
-	return parsei(expr)
+	return parse_m(expr)
 }
 
-func parsei(expr string) *node {
-	n := &node{}
+func parse_m(expr string) *node {
+	trace("parse_m", expr)
 	s := 0
-	for i, c := range expr {
+	pc := 0
+	expr = strings.TrimSpace(expr)
+	for i, r := range expr {
+		if r == '(' {
+			pc++
+		}
+		if r == ')' {
+			pc--
+		}
+		if pc > 0 {
+			continue
+		}
+		if unicode.IsSpace(r) {
+			continue
+		}
 		if i == 0 {
-			switch c {
+			switch r {
+			//remove + from front of x
 			case '+':
 				s = 1
 				continue
 			case '-':
+				n := &node{}
 				n.expr = "*"
 				n.left = &node{expr: "-1"}
-				n.right = parsei(expr[i+1:])
+				n.right = parse_m(expr[i+1:])
 				return n
 			}
 		}
-		switch c {
+		switch r {
 		case '*':
-			n.expr = string(c)
-			n.left = parsei(expr[s:i])
-			n.right = parsei(expr[i+1:])
-			return n
-		case '^':
-			n.expr = string(c)
-			n.left = parsei(expr[s:i])
-			n.right = parsei(expr[i+1:])
+			n := &node{}
+			n.expr = string(r)
+			n.left = parse_d(expr[s:i])
+			n.right = parse_d(expr[i+1:])
 			return n
 		}
 	}
-	n.expr = expr
-	return n
+	return parse_d(expr)
+}
+
+func parse_d(expr string) *node {
+	trace("parse_d", expr)
+	pc := 0
+	expr = strings.TrimSpace(expr)
+	for i, r := range expr {
+		if r == '(' {
+			pc++
+		}
+		if r == ')' {
+			pc--
+		}
+		if pc > 0 {
+			continue
+		}
+		if unicode.IsSpace(r) {
+			continue
+		}
+		switch r {
+		case '/':
+			n := &node{}
+			n.expr = string(r)
+			n.left = parse_p(expr[0:i])
+			n.right = parse_p(expr[i+1:])
+			return n
+		}
+	}
+	return parse_p(expr)
+}
+
+func parse_p(expr string) *node {
+	trace("parse_p", expr)
+	pc := 0
+	expr = strings.TrimSpace(expr)
+	for i, r := range expr {
+		if r == '(' {
+			pc++
+		}
+		if r == ')' {
+			pc--
+		}
+		if pc > 0 {
+			continue
+		}
+		if unicode.IsSpace(r) {
+			continue
+		}
+		switch r {
+		case '^':
+			n := &node{}
+			n.expr = string(r)
+			n.left = parse_l(expr[0:i])
+			n.right = parse_l(expr[i+1:])
+			return n
+		}
+	}
+	return parse_l(expr)
+}
+
+func parse_l(expr string) *node {
+	trace("parse_l", expr)
+	l := len(expr)
+	if expr[0] == '(' && expr[l-1] == ')' {
+		return parse(expr[1 : l-1])
+	}
+	return &node{expr: expr}
 }
 
 func evald(expr string, value float64) float64 {
