@@ -187,19 +187,22 @@ func eval(n *node, value float64) float64 {
 			return left + right
 		case "*":
 			return left * right
+		case "/":
+			return left / right
 		case "^":
 			return math.Pow(left, right)
 		default:
 			panic("Unknown operation")
 		}
 	}
-	switch n.expr {
+	expr := trim(n.expr)
+	switch expr {
 	case "x":
 		return value
-	case "+x":
+	case "+x": //needed
 		return value
 	default:
-		val, err := strconv.ParseFloat(n.expr, 64)
+		val, err := strconv.ParseFloat(expr, 64)
 		if err != nil {
 			panic(err)
 		}
@@ -220,5 +223,16 @@ func evals(n *node) string {
 		return b.String()
 	}
 	b.WriteString(n.expr)
+	return b.String()
+}
+
+func trim(str string) string {
+	var b strings.Builder
+	b.Grow(len(str))
+	for _, ch := range str {
+		if !unicode.IsSpace(ch) {
+			b.WriteRune(ch)
+		}
+	}
 	return b.String()
 }

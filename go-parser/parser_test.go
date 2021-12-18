@@ -19,7 +19,7 @@ func TestParser(t *testing.T) {
 	assert.Equal(t, "+1", root.right.expr)
 }
 
-func TestEval(t *testing.T) {
+func TestEval1(t *testing.T) {
 	assert.Equal(t, 25.0, evald("x^2", 5))
 	assert.Equal(t, 36.0, evald("x^2", 6))
 	assert.Equal(t, 8.0, evald("x^3", 2))
@@ -33,7 +33,7 @@ func TestEval(t *testing.T) {
 }
 
 func TestEval2(t *testing.T) {
-	ast := parse("x*(x+2)+2^3*4/2")
+	ast := parse("(((x) * ( (x) + 2 ) + 2 ^ 3 * 4 / 2 ))")
 	fmt.Println(evals(ast))
 	assert.Equal(t, 8.0+16.0, eval(ast, 2))
 }
