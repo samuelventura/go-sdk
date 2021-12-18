@@ -1,3 +1,10 @@
 go mod init github.com/samuelventura/tryouts/go-parser
 
 go get github.com/stretchr/testify/assert
+
+improvements
+
+- Negative exponents 2 ^ -1
+- Implicit multiplication 2x x(x+1) (x+1)(x-1)
+- Multivariable x,y,z,...
+- Functions: sin, cos, tan, sqrt, ...

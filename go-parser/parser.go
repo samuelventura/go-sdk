@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"math"
 	"strconv"
 	"strings"
@@ -14,25 +13,30 @@ type node struct {
 	right *node
 }
 
+type parent struct {
+	count int
+}
+
+func (p *parent) contin(r rune) bool {
+	if r == '(' {
+		p.count++
+	}
+	if r == ')' {
+		p.count--
+	}
+	return p.count > 0
+}
+
 func trace(args ...interface{}) {
-	fmt.Println(args...)
+	//fmt.Println(args...)
 }
 
 func parse(expr string) *node {
 	trace("parse", expr)
-	pc := 0
-	expr = strings.TrimSpace(expr)
+	pc := &parent{}
+	expr = trim(expr)
 	for i, r := range expr {
-		if r == '(' {
-			pc++
-		}
-		if r == ')' {
-			pc--
-		}
-		if pc > 0 {
-			continue
-		}
-		if unicode.IsSpace(r) {
+		if pc.contin(r) {
 			continue
 		}
 		//ignore first sign
@@ -65,19 +69,10 @@ func parse(expr string) *node {
 func parse_m(expr string) *node {
 	trace("parse_m", expr)
 	s := 0
-	pc := 0
-	expr = strings.TrimSpace(expr)
+	pc := &parent{}
+	expr = trim(expr)
 	for i, r := range expr {
-		if r == '(' {
-			pc++
-		}
-		if r == ')' {
-			pc--
-		}
-		if pc > 0 {
-			continue
-		}
-		if unicode.IsSpace(r) {
+		if pc.contin(r) {
 			continue
 		}
 		if i == 0 {
@@ -108,19 +103,10 @@ func parse_m(expr string) *node {
 
 func parse_d(expr string) *node {
 	trace("parse_d", expr)
-	pc := 0
-	expr = strings.TrimSpace(expr)
+	pc := &parent{}
+	expr = trim(expr)
 	for i, r := range expr {
-		if r == '(' {
-			pc++
-		}
-		if r == ')' {
-			pc--
-		}
-		if pc > 0 {
-			continue
-		}
-		if unicode.IsSpace(r) {
+		if pc.contin(r) {
 			continue
 		}
 		switch r {
@@ -137,19 +123,10 @@ func parse_d(expr string) *node {
 
 func parse_p(expr string) *node {
 	trace("parse_p", expr)
-	pc := 0
-	expr = strings.TrimSpace(expr)
+	pc := &parent{}
+	expr = trim(expr)
 	for i, r := range expr {
-		if r == '(' {
-			pc++
-		}
-		if r == ')' {
-			pc--
-		}
-		if pc > 0 {
-			continue
-		}
-		if unicode.IsSpace(r) {
+		if pc.contin(r) {
 			continue
 		}
 		switch r {

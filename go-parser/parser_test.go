@@ -33,7 +33,7 @@ func TestEval1(t *testing.T) {
 }
 
 func TestEval2(t *testing.T) {
-	ast := parse("(((x) * ( (x) + 2 ) + 2 ^ 3 * 4 / 2 ))")
+	ast := parse("(((x) * ( (x) + 2.0e0 ) + 2 ^ 3 * 4 / 2 )) - 2 ^ (-1)")
 	fmt.Println(evals(ast))
-	assert.Equal(t, 8.0+16.0, eval(ast, 2))
+	assert.Equal(t, 8.0+16.0-0.5, eval(ast, 2))
 }
