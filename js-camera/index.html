@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/numeric/1.2.6/numeric.min.js"></script>    
+<body onload="render()">
+
+<h1>Plot</h1>
+
+<canvas id="plot" width="200" height="200">
+
+</canvas>
+
+<h2 id="l_long">Longitud</h2>
+<input id="long" type="range" min="-90" max="90" step="10" onchange="render()">
+<h2 id="l_lati">Latitud</h2>
+<input id="lati" type="range" min="-90" max="90" step="10" onchange="render()">
+<h2 id="l_dist">Camera Distance</h2>
+<input id="dist" type="range" min="1" max="3" step="0.1" onchange="render()">
+<h2 id="l_focus">Focus Distance</h2>
+<input id="focus" type="range" min="1" max="3" step="0.1" onchange="render()">
+
+</body>
+<style>
+    canvas { border: 1px solid black; }
+</style>
+<script>
+    const e_long = document.getElementById('long');
+    const e_lati = document.getElementById('lati');
+    const e_dist = document.getElementById('dist');
+    const e_focus = document.getElementById('focus');
+    const e_canvas = document.getElementById('plot');
+    const ctx = e_canvas.getContext('2d');
+
+    const v_size = function(vect) {
+        return Math.sqrt(vect[0]*vect[0]+vect[1]*vect[1]+vect[2]*vect[2])
+    }
+
+    const v_scale = function(vect, factor) {
+        return [vect[0]*factor, vect[1]*factor, vect[2]*factor]
+    }
+
+    const v_dot = function(vect1, vect2) {
+        return vect1[0]*vect2[0]+vect1[1]*vect2[1]+vect1[2]*vect2[2]
+    }
+
+    const v_sum = function(vect1, vect2) {
+        return [vect1[0]+vect2[0], vect1[1]+vect2[1], vect1[2]+vect2[2]]
+    }
+
+    const v_dif = function(vect1, vect2) {
+        return [vect1[0]-vect2[0], vect1[1]-vect2[1], vect1[2]-vect2[2]]
+    }
+
+    const v_cross = function(vect1, vect2) {
+        return [
+            vect1[1]*vect2[2] - vect1[2]*vect2[1], 
+            vect1[2]*vect2[0] - vect1[0]*vect2[2], 
+            vect1[0]*vect2[1] - vect1[1]*vect2[0], 
+        ]
+    }
+
+    const z = (x, y) => Math.sin(2*x + 2*y * y)
+
+    //https://ccc-js.github.io/numeric2/
+    //https://ccc-js.github.io/numeric2/documentation.html
+    const render = function() {
+        const long = Number(e_long.value)
+        const lati = Number(e_lati.value)
+        const dist = Number(e_dist.value)
+        const focus = Number(e_focus.value)
+        document.getElementById('l_long').textContent = `Longitud ${long}`
+        document.getElementById('l_lati').textContent = `Latitud ${lati}`
+        document.getElementById('l_dist').textContent = `Camera ${dist}`
+        document.getElementById('l_focus').textContent = `Focus ${focus}`
+        const long_rad = long * Math.PI / 180.0
+        const lati_rad = lati * Math.PI / 180.0
+        console.log("dist", dist)
+        console.log("focus", focus)
+        console.log("long", long, long_rad)
+        console.log("lati", lati, lati_rad)
+        const f_xy = dist * Math.cos(lati_rad)
+        const c_z = dist * Math.sin(lati_rad)
+        const c_x = f_xy * Math.cos(long_rad)
+        const c_y = f_xy * Math.sin(long_rad)
+        const v_xy = [c_x, c_y, 0]
+        const v_cam = [c_x, c_y, c_z]
+        const f_ip =  f_xy * Math.cos(lati_rad) / dist
+        const v_ip = v_scale(v_cam, f_ip)
+        const v_it = v_dif(v_ip, v_xy)
+        //transition across zero not handled very well naturally
+        //requires v_j to always point upward
+        const s_it = lati < 0 ? -v_size(v_it) : v_size(v_it)
+        const v_j = s_it == 0 ? [0,0,-1] : v_scale(v_it, - 1 / s_it)
+        const v_k = v_scale(v_cam, - 1 / v_size(v_cam))
+        const v_i = v_cross(v_j, v_k)
+        console.log("v_i", v_i)
+        console.log("v_k", v_k)
+        console.log("v_j", v_j)
+        const base =[v_i, v_j, v_k]
+        const revr = numeric.transpose(base)
+        const trans = numeric.inv(revr)
+        console.log("v_cam", v_size(v_cam), v_cam)
+        console.log("base", base)
+        console.log("trans", trans)
+        ctx.clearRect(0, 0, 200, 200)
+        ctx.fillStyle = "rgba(0,0,0,100)"
+
+        const ini = 1
+        const inc = .1
+        const dot = 2
+
+        for(var i=-ini; i<=ini; i+=inc) {
+            for(var j=-ini; j<=ini; j+=inc)
+            {
+                const k = z(i, j)
+                const v_point = [i, j, k]
+                const f_proj = v_dot(v_cam, v_point) / (dist * dist)
+                const v_proj = v_scale(v_cam, f_proj)
+                const s_proj = f_proj * dist
+                const v_front = v_dif(v_point, v_proj)
+                const f_imag = focus / (focus + dist - s_proj)
+                const v_image = v_scale(v_front, f_imag)
+                const v_trans = numeric.dot(trans, v_image)
+                t_x = Math.trunc(100 + v_trans[0] * 100)
+                t_y = Math.trunc(100 - v_trans[1] * 100)
+                ctx.fillRect(t_x, t_y, dot, dot)
+                // console.log(i, j, k, f_imag, v_image, v_trans)
+                //console.log(i, j, v_trans[0], v_trans[1], t_x, t_y)
+            }
+        }
+    }
+
+</script>
+</html>

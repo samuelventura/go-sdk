@@ -1,0 +1,5 @@
+
+- eval function input box
+- z level pixel coloring
+- grid with line-to
+- grid params range and step
