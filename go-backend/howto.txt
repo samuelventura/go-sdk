@@ -1,0 +1,7 @@
+go mod init github.com/samuelventura/tryouts/go-backend
+go get github.com/gin-gonic/gin
+go run .
+
+http://localhost:8080/ping
+curl http://localhost:8080/ping
+
