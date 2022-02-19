@@ -49,8 +49,8 @@ defmodule EchoServer do
         spawn(fn -> client(socket) end)
         accept(listener)
 
-      error ->
-        Process.exit(self(), error)
+      {:error, reason} ->
+        Process.exit(self(), reason)
     end
   end
 
@@ -60,8 +60,8 @@ defmodule EchoServer do
         :gen_tcp.send(socket, data)
         client(socket)
 
-      error ->
-        Process.exit(self(), error)
+      {:error, reason} ->
+        Process.exit(self(), reason)
     end
   end
 end
