@@ -20,6 +20,10 @@ defmodule LinkLeaksTest do
     assert_receive lid, 400
     assert_receive {:DOWN, ^ref, :process, ^pid, :normal}, 400
     assert true == Process.alive?(lid)
+    # garbage collection wont help
+    # :erlang.garbage_collect(pid)
+    # :timer.sleep(200)
+    # assert false == Process.alive?(lid)
   end
 
   test "Process leak on GenServer stop call" do
