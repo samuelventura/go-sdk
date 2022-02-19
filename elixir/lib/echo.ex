@@ -46,7 +46,6 @@ defmodule EchoServer do
   defp accept(listener) do
     case :gen_tcp.accept(listener) do
       {:ok, socket} ->
-        :gen_tcp.controlling_process(socket, self())
         spawn(fn -> client(socket) end)
         accept(listener)
 

@@ -5,12 +5,14 @@ defmodule EchoServerTest do
     {:ok, pid} = EchoServer.start_link()
     opts = [:binary, packet: :raw, active: false]
     {ip, port} = EchoServer.endpoint(pid)
-    {:ok, _client} = :gen_tcp.connect(ip, port, opts)
+    {:ok, client} = :gen_tcp.connect(ip, port, opts)
     :ok = EchoServer.stop(pid)
     {:error, :econnrefused} = :gen_tcp.connect(ip, port, opts)
-    # FIXME client still active
-    # :timer.sleep(100)
-    # :ok = :gen_tcp.send(client, "data")
-    # {:error, :closed} = :inet.sockname(client)
+    :timer.sleep(100)
+    {:ok, {_, _}} = :inet.sockname(client)
+    assert :ok == :gen_tcp.send(client, "data")
+    # recv seems to be the closed detection mechanism
+    assert {:error, :closed} == :gen_tcp.recv(client, 0)
+    assert {:error, :closed} == :gen_tcp.send(client, "data")
   end
 end

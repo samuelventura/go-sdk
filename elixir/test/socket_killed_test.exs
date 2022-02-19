@@ -59,6 +59,8 @@ defmodule SocketKilledTest do
     assert_receive {client, ip, port}, 400
     assert_receive client2, 400
     {:ok, {^ip, ^port}} = :inet.sockname(client)
+    {:ok, {_, _}} = :inet.sockname(client2)
+    # the DOWN message seems to ensure client2 already closed
     send(pid2, :continue)
     assert_receive {:DOWN, ^ref2, :process, ^pid2, :normal}, 400
     assert {:error, :einval} == :inet.sockname(client2)
@@ -101,9 +103,11 @@ defmodule SocketKilledTest do
     assert_receive {client, ip, port}, 400
     assert_receive client2, 400
     {:ok, {^ip, ^port}} = :inet.sockname(client)
+    {:ok, {_, _}} = :inet.sockname(client2)
     send(pid, :continue)
     assert_receive {:DOWN, ^ref, :process, ^pid, :normal}, 400
     assert {:error, :einval} == :inet.sockname(client)
+    # the DOWN message seems to ensure client2 already closed
     send(pid2, :continue)
     assert_receive {:DOWN, ^ref2, :process, ^pid2, :normal}, 400
     assert {:error, :einval} == :inet.sockname(client2)
