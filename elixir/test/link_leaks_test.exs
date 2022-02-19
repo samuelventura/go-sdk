@@ -22,7 +22,30 @@ defmodule LinkLeaksTest do
     assert true == Process.alive?(lid)
   end
 
-  test "Process leaks on GenServer normal exit" do
+  test "Process leak on GenServer stop call" do
+    self = self()
+
+    {:ok, pid} =
+      GenServer.start(Server, fn ->
+        lid =
+          spawn_link(fn ->
+            receive do
+              any -> any
+            end
+          end)
+
+        send(self, lid)
+        {:ok, lid}
+      end)
+
+    assert_receive lid, 400
+    ref = :erlang.monitor(:process, pid)
+    GenServer.stop(pid)
+    assert_receive {:DOWN, ^ref, :process, ^pid, :normal}, 400
+    assert true == Process.alive?(lid)
+  end
+
+  test "Process leaks on GenServer normal stop" do
     self = self()
 
     {:error, :normal} =
