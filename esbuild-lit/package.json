@@ -1,0 +1,11 @@
+{
+  "dependencies": {
+    "esbuild": "^0.14.23",
+    "lit": "^2.2.0"
+  },
+  "scripts": {
+    "build": "esbuild app.js --bundle --outfile=www/app.js --sourcemap --minify",
+    "watch": "esbuild app.js --bundle --outfile=www/app.js --watch",
+    "serve": "esbuild app.js --bundle --outfile=www/app.js --servedir=www"
+  }
+}
