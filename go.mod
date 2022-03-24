@@ -8,9 +8,12 @@ require (
 )
 
 require (
+	github.com/denisenkom/go-mssqldb v0.12.0 // indirect
 	github.com/felixge/tcpkeepalive v0.0.0-20160804073959-5bb0b2dea91e // indirect
 	github.com/goburrow/modbus v0.1.0 // indirect
 	github.com/goburrow/serial v0.1.0 // indirect
+	github.com/golang-sql/civil v0.0.0-20190719163853-cb61b32ac6fe // indirect
+	github.com/golang-sql/sqlexp v0.0.0-20170517235910-f1bb20e5a188 // indirect
 	github.com/google/gopacket v1.1.19 // indirect
 	github.com/samuelventura/go-modbus v0.1.0 // indirect
 	github.com/samuelventura/go-serial v0.1.0 // indirect
@@ -30,7 +33,7 @@ require (
 	github.com/modern-go/reflect2 v0.0.0-20180701023420-4b7aa43c6742 // indirect
 	github.com/plutov/paypal/v4 v4.4.1
 	github.com/ugorji/go/codec v1.1.7 // indirect
-	golang.org/x/crypto v0.0.0-20200622213623-75b288015ac9 // indirect
+	golang.org/x/crypto v0.0.0-20201016220609-9e8e0b390897 // indirect
 	golang.org/x/sys v0.0.0-20211205182925-97ca703d548d // indirect
-	gopkg.in/yaml.v2 v2.2.8 // indirect
+	gopkg.in/yaml.v2 v2.4.0 // indirect
 )

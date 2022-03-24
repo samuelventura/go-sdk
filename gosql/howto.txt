@@ -1,0 +1,16 @@
+#https://github.com/denisenkom/go-mssqldb
+go get github.com/denisenkom/go-mssqldb
+
+#sqlserver 2019 dev
+create tryout db with dbo.Tabl1(ID NCHAR(10), NAME NCHAR(10))
+create tryout login with tryout password
+in database security grant db_datawriter membership to tryout user
+enable sql authentication in server properties
+restart server instance
+#enable tcp/ip using and restart service in same console below
+C:\Windows\SysWOW64\SQLServerManager15.msc
+
+PS C:\Users\samuel\Desktop\tryouts\gosql> go run .
+2022/03/23 21:38:23 sqlserver://tryout:tryout@127.0.0.1:1433
+2022/03/23 21:38:23 {0xc00035c000 0xc00003e670}
+
