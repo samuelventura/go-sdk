@@ -14,3 +14,4 @@ PS C:\Users\samuel\Desktop\tryouts\gosql> go run .
 2022/03/23 21:38:23 sqlserver://tryout:tryout@127.0.0.1:1433
 2022/03/23 21:38:23 {0xc00035c000 0xc00003e670}
 
+#open port 1433 in windows firewall for remote connection
