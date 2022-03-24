@@ -11,6 +11,7 @@ require (
 	github.com/felixge/tcpkeepalive v0.0.0-20160804073959-5bb0b2dea91e // indirect
 	github.com/goburrow/modbus v0.1.0 // indirect
 	github.com/goburrow/serial v0.1.0 // indirect
+	github.com/google/gopacket v1.1.19 // indirect
 	github.com/samuelventura/go-modbus v0.1.0 // indirect
 	github.com/samuelventura/go-serial v0.1.0 // indirect
 	github.com/samuelventura/go-tools v0.0.0-20211121180241-3813b949066c // indirect
