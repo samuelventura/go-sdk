@@ -13,7 +13,7 @@ func main() {
 	u := &url.URL{
 		Scheme: "sqlserver",
 		User:   url.UserPassword("tryout", "tryout"),
-		Host:   fmt.Sprintf("%s:%d", "127.0.0.1", 1433),
+		Host:   fmt.Sprintf("%s:%d", "10.77.3.211", 1433),
 	}
 	log.Println(u.String())
 	db, err := sql.Open("sqlserver", u.String())
