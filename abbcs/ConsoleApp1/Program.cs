@@ -18,9 +18,25 @@ Console.WriteLine("IP {0}", ci.IPAddress);
 Console.WriteLine("Availability {0}", ci.Availability);
 var c = new Controller(ci);
 var q = c.Ipc.GetQueue("RMQ_T_ROB1");
-var m = new IpcMessage();
-m.SetData(UTF8Encoding.UTF8.GetBytes("bool;TRUE"));
-q.Send(m);
-m.SetData(UTF8Encoding.UTF8.GetBytes("bool;FALSE"));
-q.Send(m);
+
+Action<string> send = str =>
+{
+    //important NOT to reuse the IpcMessage
+    Console.WriteLine("Sending {0}", str);
+    var m = new IpcMessage();
+    m.SetData(UTF8Encoding.UTF8.GetBytes(str));
+    q.Send(m);
+};
+
+//third message gets discarded and halts the program
+//https://www.youtube.com/watch?v=wPCBtdSS-AA
+//corner path failure = corner zone converted to stop point
+//use fine instead of zXXX in RAPID MoveAbsJ
+while (true)
+{
+    send("robjoint;[90,0,0,0,0,0]");
+    send("robjoint;[0,0,0,0,0,0]");
+    Console.ReadKey();
+}
+
 c.Dispose();
