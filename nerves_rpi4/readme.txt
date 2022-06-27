@@ -13,3 +13,5 @@ Improvements
 
 - tio says shell will run on tty1 and ask to set -c ttyS0 in erlinit.confg to run on that uart
 
+NervesMOTD.print()
+ping rpi4-4ad8

@@ -20,7 +20,7 @@ config :nerves_runtime, :kernel, use_system_registry: false
 
 config :nerves,
   erlinit: [
-    hostname_pattern: "nerves-%s"
+    hostname_pattern: "rpi4-%s"
   ]
 
 # Configure the device for SSH IEx prompt access and firmware updates
@@ -70,7 +70,7 @@ config :mdns_lite,
   # because otherwise any of the devices may respond to nerves.local leading to
   # unpredictable behavior.
 
-  hosts: [:hostname, "nerves"],
+  hosts: [:hostname, "rpi4"],
   ttl: 120,
 
   # Advertise the following services over mDNS.
