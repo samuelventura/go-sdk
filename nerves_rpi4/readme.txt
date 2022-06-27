@@ -15,3 +15,5 @@ Improvements
 
 NervesMOTD.print()
 ping rpi4-4ad8
+ssh rpi4-4ad8
+
