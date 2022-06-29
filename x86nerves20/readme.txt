@@ -12,24 +12,26 @@ MIX_TARGET=x86_64 mix burn
 MIX_TARGET=x86_64 mix burn -d image.img
 chown samuel:samuel image.img
 
-sudo qemu-system-x86_64 -m 512 -enable-kvm -usb -hdb /dev/sdc \
-    -netdev user,id=mynet0,hostfwd=tcp::8022-:22 -device \
-    virtio-net-pci,netdev=mynet0
-
+#from https://github.com/nerves-project/nerves_system_x86_64/issues/129
 qemu-system-x86_64 \
- -enable-kvm -m 512M \
- -netdev user,id=mynet0,hostfwd=tcp::8022-:22 \
- -device virtio-net-pci,netdev=mynet0 \
- -drive file=image.img,format=raw \
- -serial mon:stdio
+    -drive file=image.img,if=virtio,format=raw \
+    -net nic,model=virtio \
+    -net user,hostfwd=tcp::8022-:22 \
+    -serial stdio
 
-qemu-virgil -enable-kvm -m 512M -device virtio-vga,virgl=on \
-    -display sdl,gl=on -netdev user,id=ethernet.0,hostfwd=tcp::8022-:22 \
-    -device rtl8139,netdev=ethernet.0 image.img
+#works as well
+sudo qemu-system-x86_64 \
+    -drive file=/dev/sdc,if=virtio,format=raw \
+    -net nic,model=virtio \
+    -net user,hostfwd=tcp::8022-:22 \
+    -serial stdio
+
+#IMAGE BOOTS IN GIGABYTE BRIX AS WELL WITH EXACT SAME ISSUES AND NO ETH0 DETECTION
 
 ssh localhost -p 8022
 
-samuel@p3420:~/src/nerves_system_x86_64/example$ sudo blkid
-/dev/sdc1: SEC_TYPE="msdos" UUID="0021-7A00" TYPE="vfat" PARTUUID="04030201-01"
-/dev/sdc2: TYPE="squashfs" PARTUUID="04030201-02"
-/dev/sdc3: PARTUUID="04030201-03"
+kex_exchange_identification: read: Connection reset by peer
+erlinit: Cannot mount /dev/rootdisk0p4 at /root: Invalid argument (FIXED ON REBOOT)
+warning: the VM is running with native name encoding of latin1 which may cause Elixir 
+    to malfunction as it expects utf8. Please ensure your locale is set to UTF-8
+    (which can be verified by runnig "locale" in your shell)
