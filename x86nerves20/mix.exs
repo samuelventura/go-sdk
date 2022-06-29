@@ -31,7 +31,7 @@ defmodule X86nerves.MixProject do
   defp deps do
     [
       # Dependencies for all targets
-      {:nerves, "~> 1.6.0", runtime: false},
+      {:nerves, "~> 1.7.15", runtime: false},
       {:shoehorn, "~> 0.8.0"},
       {:ring_logger, "~> 0.8.3"},
       {:toolshed, "~> 0.2.13"},
@@ -45,7 +45,7 @@ defmodule X86nerves.MixProject do
       # bumps to Nerves systems. Since these include Linux kernel and Erlang
       # version updates, please review their release notes in case
       # changes to your application are needed.
-      {:nerves_system_x86_64, "== 1.12.0", runtime: false, targets: :x86_64}
+      {:nerves_system_x86_64, "== 1.20.0", runtime: false, targets: :x86_64}
     ]
   end
 

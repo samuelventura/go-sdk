@@ -29,6 +29,9 @@ qemu-virgil -enable-kvm -m 512M -device virtio-vga,virgl=on \
 
 ssh localhost -p 8022
 
+samuel@p3420:~$ ssh localhost -p 8022
+kex_exchange_identification: read: Connection reset by peer
+
 samuel@p3420:~/src/nerves_system_x86_64/example$ sudo blkid
 /dev/sdc1: SEC_TYPE="msdos" UUID="0021-7A00" TYPE="vfat" PARTUUID="04030201-01"
 /dev/sdc2: TYPE="squashfs" PARTUUID="04030201-02"
